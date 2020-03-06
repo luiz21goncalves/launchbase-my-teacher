@@ -14,3 +14,54 @@
   --yellow: #f1fa8c;
 }
 
+* {
+  padding: 0;
+  margin: 0;
+  border: none;
+}
+
+body {
+  background-color: var(--selection);
+  font-family: 'Roboto', sans-serif;
+}
+
+header {
+  background-color: var(--background);
+  width: 100%;
+  padding: 32px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.links {
+  font-size: 22px;
+}
+
+.links a + a {
+  margin-left: 50px;
+}
+
+.links a {
+  color: var(--foreground);
+  text-decoration: none;
+  position: relative;
+}
+
+.links a:hover {
+  color: var(--purple);
+}
+
+.links a::after {
+  content: "";
+  width: 0;
+  height: 2px;
+  background-color: var(--purple);
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+}
+
+.links a:hover::after {
+  width: 100%;
+  transition: width 400ms ease-out;
+}
