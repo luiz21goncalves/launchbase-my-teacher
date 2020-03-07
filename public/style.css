@@ -74,10 +74,10 @@ header {
   display: grid;
   grid-template-columns: 40% 60%;
   box-shadow: -2px 4px 8px 4px rgba(0, 0, 0, 0.2);
-  animation: left-up 350ms ease-out;
+  animation: rigth-up 350ms ease-out;
 }
 
-@keyframes left-up {
+@keyframes rigth-up {
   from {
     opacity: 0;
     transform: translate(-35px, 35px);
@@ -114,8 +114,8 @@ header {
 }
 
 .details .item div:nth-child(2) {
-  font-size: 18px;
-  line-height: 28px;
+  font-size: 16px;
+  line-height: 26px;
   color: #333;
   font-weight: bold;
 }
@@ -134,4 +134,38 @@ header {
   border-radius: 15px;
   margin: 4px 0;
   display: inline-block;
+}
+
+/* ==== FORM ==== */
+
+input, section {
+  width: 100%;
+  outline: none;
+  background-color: var(--foreground);
+  font-size: 16px;
+  line-height: 28px;
+  color: #333;
+  font-weight: bold;
+}
+
+input[type="radio"] {
+  width: initial;
+  transform: translateY(20%);
+  margin-right: 4px;
+}
+
+input::placeholder {
+  font-size: 16px;
+  font-weight: normal;
+}
+
+button[type="submit"] {
+  width: 100%;
+  background-color: var(--comment);
+  font-weight: bold;
+  font-size: 16px;
+  margin-top: 32px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  outline: none;
 }
