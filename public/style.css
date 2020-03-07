@@ -65,3 +65,73 @@ header {
   width: 100%;
   transition: width 400ms ease-out;
 }
+
+.card {
+  max-width: 800px;
+  min-height: 400px;
+  margin: 32px auto;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 40% 60%;
+  box-shadow: -2px 4px 8px 4px rgba(0, 0, 0, 0.2);
+  animation: left-up 350ms ease-out;
+}
+
+@keyframes left-up {
+  from {
+    opacity: 0;
+    transform: translate(-35px, 35px);
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.card .image {
+  background: url(https://source.unsplash.com/collection/8874679/900x900) no-repeat center center / cover;
+  height: 100%;
+}
+
+.details {
+  background-color: var(--foreground);
+  padding: 32px;
+}
+
+.details .item {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+  padding: 8px 0;
+}
+
+.details .item:last-child {
+  border: none;
+}
+
+.details h3, .details .item div:nth-child(1) {
+  font-size: 14px;
+  line-height: 24px;
+  color: #666;
+  letter-spacing: 0.5px;
+}
+
+.details .item div:nth-child(2) {
+  font-size: 18px;
+  line-height: 28px;
+  color: #333;
+  font-weight: bold;
+}
+
+.details h3 {
+  text-transform: uppercase;
+  color: var(--selection);
+}
+
+.details .item span {
+  font-size: 14px;
+  line-height: 24px;
+  color: var(--foreground);
+  background-color: var(--comment);
+  padding: 2px 8px;
+  border-radius: 15px;
+  margin: 4px 0;
+  display: inline-block;
+}
