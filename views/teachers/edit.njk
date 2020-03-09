@@ -1,0 +1,21 @@
+{% extends "layout.njk" %}
+
+{% block content %}
+  <div class="card">
+
+    <div class="image"style="background: url({{ teacher.avatar_url }}) no-repeat center center / cover">
+      <img >
+    </div>
+
+    <form method="POST" action="/teachers">
+
+      <div class="details">
+        <h3>Detalhes</h3>
+        
+        {% include "teachers/filds.njk" %}
+      </div>
+
+    </form>
+  </div>
+
+{% endblock content %}

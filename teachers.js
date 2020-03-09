@@ -1,5 +1,26 @@
 const fs = require("fs");
 const data = require("./data.json");
+const { age, date, dateBR, graduation } = require("./utils");
+
+exports.show = function(req, res) {
+  const { id } = req.params
+
+  const foundTeacher = data.teachers.find(function(teacher) {
+    return teacher.id == id;
+  });
+
+  if (!foundTeacher) return res.send("Professor não cadastrato")
+  
+  const teacher = {
+    ...foundTeacher,
+    age: age(foundTeacher.birth),
+    classes: foundTeacher.classes.split(","),
+    created_at: dateBR(foundTeacher.created_at),
+    graduation: graduation(foundTeacher.graduation),
+  };
+
+  return res.render("teachers/show", { teacher });
+};
 
 exports.post = function(req, res) {
   const keys = Object.keys(req.body);
@@ -9,7 +30,7 @@ exports.post = function(req, res) {
       return res.send("Por favor, preencha todos os campos")
   }
 
-  let { avatar_url, name, birth, schooling, type_of_class, services } = req.body;
+  let { avatar_url, name, birth, graduation, type_of_class, classes } = req.body;
 
   birth = Date.parse(birth);
   const created_at = Date.now();
@@ -20,9 +41,9 @@ exports.post = function(req, res) {
     avatar_url,
     name,
     birth,
-    schooling,
+    graduation,
     type_of_class,
-    services,
+    classes,
     created_at
   });
 
@@ -31,4 +52,21 @@ exports.post = function(req, res) {
 
     return res.redirect("/teachers");
   });
+};
+
+exports.edit = function(req, res) {
+  const { id } = req.params
+
+  const foundTeacher = data.teachers.find(function(teacher) {
+    return teacher.id == id;
+  });
+
+  if (!foundTeacher) return res.send("Professor não cadastrato")
+  
+  const teacher = {
+    ...foundTeacher,
+    birth: date(foundTeacher.birth),
+  };
+
+  return res.render("teachers/edit", { teacher });
 };
