@@ -2,6 +2,20 @@ const fs = require("fs");
 const data = require("./data.json");
 const { age, date, dateBR, graduation } = require("./utils");
 
+exports.index = function(req, res) {
+  let teachers = [];
+
+  data.teachers.forEach(function(teacher) {
+    teacher = {
+      ...teacher,
+      classes: teacher.classes.split(",")
+    }
+    return teachers.push(teacher)
+  })
+
+  return res.render("teachers/index", { teachers });
+};
+
 exports.show = function(req, res) {
   const { id } = req.params
 

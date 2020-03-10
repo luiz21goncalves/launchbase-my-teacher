@@ -167,7 +167,7 @@ input::placeholder {
   padding: 8px 16px;
   border-radius: 8px;
   outline: none;
-  color: #333;
+  color: #fff;
 }
 
 .button {
@@ -180,4 +180,68 @@ input::placeholder {
 #form-delete button[type="submit"] {
   margin-top: 8px;
   background-color: var(--red);
+}
+
+/* ==== INDEX TEACHERS ==== */
+
+.table-container {
+  display: block;
+  padding: 32px;
+  box-sizing: border-box;
+  background-color: var(--foreground);
+}
+
+.table-container thead tr th {
+  color: #666;
+  text-transform: uppercase;
+  text-align: center;
+  font-size: 16px;
+}
+
+.table-container table {
+  width: 100%;
+  border-spacing: 0;
+}
+
+.table-container th, .table-container td {
+  padding: 12px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+  text-align: center;
+  font-size: 16px;
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+tbody tr td:first-child {
+  display: grid;
+  grid-template-columns: 50px 1fr;
+  align-items: center;
+}
+
+tbody tr td:first-child span {
+ width: 40px;
+ height: 40px;
+ background-position: center;
+ background-size: cover;
+ border-radius: 50%;
+ border: 2px solid #fff;
+ box-shadow: -4px 2px 4px -1px rgba(0, 0, 0, 0.5);
+}
+
+tbody tr td:last-child a {
+  background-color: var(--comment);
+  padding: 4px 16px;
+  color: #FFF;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+tbody tr td:nth-child(2) span {
+  background-color: var(--comment);
+  padding: 2px;
+  color: var(--foreground);
+  border-radius: 4px;
 }
