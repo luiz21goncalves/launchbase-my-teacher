@@ -98,3 +98,19 @@ exports.put = function(req, res) {
 
   return res.redirect(`/teachers/${id}`);
 };
+
+exports.delete = function(req, res) {
+  const { id } = req.body;
+
+  const filteredTeacher = data.teachers.filter(function(teacher) {
+    return teacher.id != id;
+  });
+
+  data.teachers = filteredTeacher;
+
+  fs.writeFile("data.json", JSON.stringify(data, null, 2), function(err) {
+    if (err) return res.send("Erro ao salvar o arquivo!");
+  });
+
+  return res.redirect("/teachers");
+};  
