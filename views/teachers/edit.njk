@@ -7,15 +7,29 @@
       <img >
     </div>
 
-    <form method="POST" action="/teachers">
+    <div class="details">
+      <form method="POST" action="/teachers?_method=PUT">
 
-      <div class="details">
         <h3>Detalhes</h3>
         
         {% include "teachers/filds.njk" %}
-      </div>
+      
+        <input 
+        type="hidden"
+        name="id" 
+        value="{{ teacher.id }}"
+        >
+      </form>
 
-    </form>
+      <form id="form-delete" action="/teachers?_method=DELETE" method="post">
+        <input 
+        type="hidden"
+        name="id" 
+        value="{{ teacher.id }}"
+        >
+      <button type="submit">Deletar</button>
+      </form>
+    </div>
   </div>
 
 {% endblock content %}
