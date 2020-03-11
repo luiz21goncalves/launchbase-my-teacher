@@ -3,29 +3,29 @@
 {% block content %}
   <div class="card">
 
-    <div class="image"style="background: url({{ teacher.avatar_url }}) no-repeat center center / cover">
+    <div class="image"style="background: url({{ student.avatar_url }}) no-repeat center center / cover">
       <img >
     </div>
 
     <div class="details">
-      <form method="POST" action="/teachers?_method=PUT">
+      <form method="POST" action="/students?_method=PUT">
 
         <h3>Detalhes</h3>
         
-        {% include "teachers/filds.njk" %}
+        {% include "students/filds.njk" %}
       
         <input 
         type="hidden"
         name="id" 
-        value="{{ teacher.id }}"
+        value="{{ student.id }}"
         >
       </form>
 
-      <form id="form-delete" action="/teachers?_method=DELETE" method="post">
+      <form id="form-delete" action="/students?_method=DELETE" method="post">
         <input 
         type="hidden"
         name="id" 
-        value="{{ teacher.id }}"
+        value="{{ student.id }}"
         >
       <button type="submit">Deletar</button>
       </form>

@@ -47,6 +47,11 @@ header {
   position: relative;
 }
 
+.links a.active {
+  font-weight: bold;
+  color: var(--purple);
+}
+
 .links a:hover {
   color: var(--purple);
 }
@@ -143,7 +148,7 @@ input, select {
   background-color: var(--foreground);
   font-size: 16px;
   line-height: 28px;
-  color: #333;
+  color: #555;
   font-weight: bold;
 }
 
@@ -201,6 +206,12 @@ input::placeholder {
 .table-container table {
   width: 100%;
   border-spacing: 0;
+}
+
+.table-container a.button {
+  margin-top: 0;
+  width: initial;
+  margin-bottom: 8px;
 }
 
 .table-container th, .table-container td {
