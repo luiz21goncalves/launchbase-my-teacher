@@ -1,5 +1,5 @@
 module.exports = {
-  age: function(timestamp) {
+  age(timestamp) {
     const today = new Date();
     const birthDate = new Date(timestamp);
 
@@ -12,7 +12,7 @@ module.exports = {
 
     return age;
   },
-  graduation: function(graduation) {
+  graduation(graduation) {
     const values = ["high_school", "university", "masters", "doctorate"];
     const replay = ["Ensino Médio Completo", "Ensino Superior Completo","Mestrado", "Doutorado"];
     
@@ -22,7 +22,7 @@ module.exports = {
       }
     }
   },
-  grade: function(grade) {
+  grade(grade) {
     const basic = [5, 6, 7, 8, 9]
 
     for (item of basic) {
@@ -31,7 +31,7 @@ module.exports = {
 
     return `${grade}º ano do ensino médio`
   },
-  date: function(timestamp) {
+  date(timestamp) {
     const date = new Date(timestamp);
 
     const year = date.getUTCFullYear();
