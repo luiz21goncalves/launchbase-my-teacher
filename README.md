@@ -3,10 +3,10 @@
 </h1>
 
 <h3 align="center">
-  Desafio 4-7: Estruturando estudantes
+  Desafio 5-2: Interagindo com o BD
 </h3>
 
-<blockquote align="center">“Tudo o que um sonho precisa para ser realizado é alguém que acredite que ele possa ser realizado.”</blockquote>
+<blockquote align="center">“Não basta saber, é preferível saber aplicar. Não é o bastante querer, é preciso saber querer.”</blockquote>
 
 <p align="center">
 
@@ -28,58 +28,35 @@
 
 ## :rocket: Sobre o desafio
 
-Nessa etapa você deve reaproveitar para os estudantes toda a estrutura já criada para os professores. Além disso, deve implementar a lógica do menu ativo.
+Nessa etapa, você deve refatorar os CRUDs dos professores e estudantes para que eles utilizem o banco de dados.
 
-### Estrutura
+### Inserindo dados
 
-Reaproveite o código obecendo os seguintes padrões:
+No método `post`, construa uma query usando `INSERT` que crie um novo registro no banco de dados.
 
-- Crie um arquivo `students.js` com a mesma estrutura que o `teachers.js`. Insira ambos os arquivos dentro uma pasta `controllers`;
-- Crie um array `students` vazio dentro do arquivo `json`;
-- Crie uma pasta `students` com a mesma estrutura de views que os professores;
-- Crie as rotas dos estudantes seguindo a mesma estrutura dos professores.
+### Buscando dados
 
-### Menu Ativo
+No método `index`, construa uma query usando `SELECT` que retorne todos os registros do banco de dados. Ordene esses resultados pelo nome de forma crescente.
 
-Crie um arquivo `scripts.js` e implemente a lógica do menu ativo utilizando o `location` e o `includes` da string. Além disso, implemente um botão de cadastro nas páginas de listagem de professores e estudantes.
+### Criando Model
 
-### Formulário
+As operações com o banco de dados não devem ficar no controller, por isso crie um model que contenha os três métodos:
 
-Faça os ajustes de professores para estudantes no formulário de criação. Além disso, remova os campos:
+- `all`: Buscar todos os registros;
+- `create`: Criar um registro;
+- `find`: Buscar apenas um registro a partir do id informado;
 
-- Grau de escolaridade;
-- Tipo de aula;
-- Acompanhamento;
-- Desde.
+### Atualizando dados
 
-e adicione os campos:
+Crie um método `update` no model. Nesse método, construa uma query utilizando `UPDATE`, `SET` e `WHERE` que atualiza um registro do banco de dados a partir do id informado.
 
-- Email: campo do tipo `email`;
-- Ano escolar: campo do tipo `select` com todas as opções de anos escolares entre 5º ano do ensino fundamental e 3º ano do ensino médio;
-- Carga horária semanal: campo do tipo `number` que indica a quantidade de horas de aulas particulares que o aluno irá ter por semana.
+### Removendo dados
 
-### Salvando os dados
+Crie um método `delete` no model. Nesse método, construa uma query utilizando `DELETE` e `WHERE` que remova um registro do banco de dados a partir do id informado.
 
-Faça os ajustes de professores para estudantes no método `post` do arquivo `students.js`. Além disso, implemente a nova estratégia de `id` (evitar repetição).
+### Refatorando students
 
-### Apresentação
-
-Faça os ajustes de professores para estudantes na página de apresentação dos dados de um estudante. Além disso, faça duas alterações no arquivo `utils.js`:
-
-- Altere o retorno da função `date` para `day`, `month`, `year`, `iso` e `birthDay` (lembre de fazer o ajuste no método `edit` para buscar o `.iso`).
-- Crie uma função chamada `grade` que retorna os dados formatados a partir do valor selecionado no select (ex.: o valor 1EF representa **1º Ano do Ensino Fundamental**).
-
-### Edição
-
-Faça os ajustes de professores para estudantes na página de edição dos dados de um estudante. Implemente o campo `Aniverśario` onde é apresentado o dia e o mês do aniversário do estudante. Além disso, altere tanto no `edit.njk` dos professores quanto no dos alunos a `url` da seção de avatar. Utilize o campo `avatar_url` cadastrado em vez da api do unsplash.
-
-### Remoção
-
-Crie um arquivo `confirm.njk` e importe ele no seu arquivo `edit.njk`. Esse arquivo deve ser responsável por escutar o evento (`addEventListener`) de submit do form de remoção e solicitar pela confirmação do usuário (`confirm`). Caso o usuário cancele a remoção, deve-se cancelar o form (método `preventDefault`).
-
-### Listagem
-
-Faça os ajustes de professores para estudantes na página de listagem dos dados de um estudante. Remova a coluna de `Acompanhamento` e adicione as de `Email` e `Ano escolar`.
+Refatore o controller de estudantes utilizando as mesmas ideias aplicadas no controller de professores.
 
 ### Estilização
 
