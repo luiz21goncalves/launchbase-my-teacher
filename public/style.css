@@ -256,3 +256,33 @@ tbody tr td:nth-child(2) span {
   color: var(--foreground);
   border-radius: 4px;
 }
+
+/* == FILTER == */
+
+.table-container .header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.table-container .header a.button, .table-container .header form button {
+  display: block;
+  padding: 4px 8px;
+  box-sizing: border-box;
+  height: 32px;
+  width: 120px;
+  margin: 0;
+}
+
+.table-container .header form {
+  display: grid;
+  grid-template-columns: 1fr 120px;
+  align-items: center;
+  grid-gap: 8px;
+}
+.table-container .header form input {
+  box-sizing: border-box;
+  border: 1px solid #ddd;
+  padding: 2px 8px;
+}
