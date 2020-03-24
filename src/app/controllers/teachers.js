@@ -4,36 +4,38 @@ const Teacher = require("../models/teacher");
 
 module.exports = {
   index(req, res) {
-    const { filter } = req.query;
-    
-    let teachersArray = [];
+    let { filter, page, limit } = req.query;
 
-    if (filter) {
-      Teacher.findBy(filter, function(teachers) {
-        teachers.forEach(function (teacher) {
-          teacher = {
-            ...teacher,
-            subjects_taught: (teacher.subjects_taught.split(","))
-          }
-    
-          return teachersArray.push(teacher)
-        })
-        return res.render("teachers/index", { teachers: teachersArray, filter });
-      });
-    } else {
-      Teacher.all(function(teachers) {
-        teachers.forEach(function (teacher) {
-          teacher = {
-            ...teacher,
-            subjects_taught: (teacher.subjects_taught.split(","))
-          }
-    
-          return teachersArray.push(teacher)
-        })
+    page = page || 1;
+    limit = limit || 2;
+    let offset = Math.ceil(limit * (page - 1));
+
+    const params = {
+      filter,
+      page,
+      limit,
+      offset,
+      callback(teachers) {
+        const pagination = {
+          total: Math.ceil(teachers[0].count / limit),
+          page
+        }
         
-        return res.render("teachers/index", { teachers:teachersArray });
-      });
+        let teachersArray = [];
+
+        teachers = teachers.forEach (function (teacher) {
+          teacher = {
+            ...teacher,
+            subjects_taught: (teacher.subjects_taught.split(","))
+          }
+          return teachersArray.push(teacher)
+        });
+              
+        return res.render("teachers/index", { teachers: teachersArray, pagination, filter });
+      }
     }
+
+    Teacher.paginate(params);
   },
   create(req, res) {
     return res.render("teachers/create");
@@ -89,4 +91,3 @@ module.exports = {
     });
   },
 }
-  

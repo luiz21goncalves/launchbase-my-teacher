@@ -4,22 +4,55 @@ const Student = require("../models/student");
 
 module.exports = {
   index(req, res) {
-    Student.all(function(students) {
-      let studentsArray = [];
+    let { filter, page, limit } = req.query;
 
-      students.forEach(function (student) {
-        student = {
-          ...student,
-          grade: grade(student.grade),
+    page = page || 1;
+    limit = limit || 2;
+    let offset = Math.ceil(limit * (page - 1));
+
+    const params = {
+      filter,
+      page,
+      limit,
+      offset,
+      callback(students) {
+
+        const pagination = {
+          total: Math.ceil(students[0].count / limit),
+          page
         }
-        return studentsArray.push(student)
-      })
-      return res.render("students/index", { students: studentsArray });
-    });
+
+        let studentsArray = [];
+
+        students = students.forEach (function (student) {
+          student = {
+            ...student,
+            grade: grade(student.grade)
+          }
+          return studentsArray.push(student)
+        });
+
+        return res.render("students/index", { students: studentsArray, pagination, filter });
+      }
+    }
+
+    Student.paginate(params);
+    // Student.all(function(students) {
+    //   let studentsArray = [];
+
+    //   students.forEach(function (student) {
+    //     student = {
+    //       ...student,
+    //       grade: grade(student.grade),
+    //     }
+    //     return studentsArray.push(student)
+    //   })
+    //   return res.render("students/index", { students: studentsArray });
+    // });
   },
   create(req, res) {
-    Student.teacherFind(function(teachers) {
-      return res.render("students/create", { teachers });
+    Student.studentFind(function(students) {
+      return res.render("students/create", { students });
     });
   },
   post(req, res) {
@@ -50,8 +83,8 @@ module.exports = {
       
       student.birth_date = date(student.birth_date).iso;
 
-      Student.teacherFind(function(teachers) {
-        return res.render("students/edit", { student ,teachers });
+      Student.studentFind(function(students) {
+        return res.render("students/edit", { student ,students });
       });
     });
   },

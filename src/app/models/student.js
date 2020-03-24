@@ -18,7 +18,7 @@ module.exports = {
         email,
         grade,
         workload,
-        teacher_id
+        student_id
       ) VALUES ($1 ,$2, $3, $4, $5, $6, $7)
       RETURNING id
     `
@@ -29,7 +29,7 @@ module.exports = {
       data.email,
       data.grade,
       data.workload,
-      data.teacher_id
+      data.student_id
     ];
 
     db.query(query, values, function(err, results) {
@@ -40,14 +40,26 @@ module.exports = {
   },
   find(id, callback) {
     db.query(`
-      SELECT students.*, teachers.name AS teacher_name
+      SELECT students.*, students.name AS student_name
       FROM students
-      LEFT JOIN teachers ON (students.teacher_id = teachers.id)
+      LEFT JOIN students ON (students.student_id = students.id)
       WHERE students.id = $1`, [id], function(err, results) {
       if (err) throw `Database error! ${err}`;
 
       callback(results.rows[0]);
     })
+  },
+  findBy(filter, callback) {
+    db.query(`
+      SELECT students.*
+      FROM students
+      WHERE students.name ILIKE '%${filter}%'
+      OR students.emailt ILIKE '%${filter}%'
+      ORDER BY students.name DESC`, function(err, results) {
+        if (err) throw `Database error! ${err}`;
+
+        callback(results.rows);
+      });
   },
   update(data, callback) {
     const query = `
@@ -58,7 +70,7 @@ module.exports = {
         email=($4),
         grade=($5),
         workload=($6),
-        teacher_id=($7)
+        student_id=($7)
       WHERE id = $8
     `
     const values = [
@@ -68,7 +80,7 @@ module.exports = {
       data.email,
       data.grade,
       data.workload,
-      data.teacher_id,
+      data.student_id,
       data.id
     ];
 
@@ -85,11 +97,44 @@ module.exports = {
       callback();
     });
   },
-  teacherFind(callback) {
-    db.query(`SELECT name, id FROM teachers`, function(err, results) {
+  studentFind(callback) {
+    db.query(`SELECT name, id FROM students`, function(err, results) {
       if (err) throw `Database error! ${err}`;
 
       callback(results.rows);
     })
   },
+  paginate(params) {
+    const{ filter, limit, offset, callback } = params;
+
+    let query = "";
+      filterQuery = "";
+      totalQuery = `(
+        SELECT COUNT(*) FROM students
+      ) AS total`;
+
+    if (filter) {
+      filterQuery = `
+      WHERE students.name ILIKE '%${filter}%'
+      OR students.email ILIKE '%${filter}%'`;
+
+      totalQuery = `(
+        SELECT COUNT(*) FROM students
+        ${filterQuery}
+      ) AS total`;
+    }
+
+    query = `SELECT * FROM students, ${totalQuery}
+      ${filterQuery}`;
+
+    query = `${query}
+    ORDER BY students.name
+    LIMIT $1 OFFSET $2`;
+
+    db.query(query, [limit, offset], function(err, results) {
+      if (err) throw `Databse Error! ${err}`;
+
+      callback(results.rows);
+    })
+  }
 };
