@@ -3,53 +3,31 @@ const { date, grade, age } = require('../../lib/utils');
 const Student = require('../models/Student');
 
 module.exports = {
-  index(req, res) {
-    return res.render('students/index')
-    let { filter, page, limit } = req.query;
+  async index(req, res) {
+    try {
+      let { filter, page, limit } = req.query;
+      page = page || 1;
+      limit = limit || 2;
+      let offset = Math.ceil(limit * (page - 1));
 
-    page = page || 1;
-    limit = limit || 2;
-    let offset = Math.ceil(limit * (page - 1));
+      const params = { filter, page, limit, offset };
+    
+      let students = await Student.paginate(params);
 
-    const params = {
-      filter,
-      page,
-      limit,
-      offset,
-      callback(students) {
-
-        const pagination = {
-          total: Math.ceil(students[0].count / limit),
-          page
-        }
-
-        let studentsArray = [];
-
-        students = students.forEach (function (student) {
-          student = {
-            ...student,
-            grade: grade(student.grade)
-          }
-          return studentsArray.push(student)
-        });
-
-        return res.render('students/index', { students: studentsArray, pagination, filter });
+      const pagination = {
+        total: Math.ceil(students[0].count / limit),
+        page
       }
+
+      students = students.map(student => ({
+        ...student,
+        grade: grade(student.grade)
+      }));
+  
+      return res.render('students/index', { students, pagination, filter });
+    } catch (err) {
+      console.error(err);
     }
-
-    Student.paginate(params);
-    Student.all(function(students) {
-      let studentsArray = [];
-
-      students.forEach(function (student) {
-        student = {
-          ...student,
-          grade: grade(student.grade),
-        }
-        return studentsArray.push(student)
-      })
-      return res.render('students/index', { students: studentsArray });
-    });
   },
   create(req, res) {
     return res.render('students/create');

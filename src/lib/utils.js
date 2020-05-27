@@ -23,13 +23,10 @@ module.exports = {
     }
   },
   grade(grade) {
-    const basic = [5, 6, 7, 8, 9]
-
-    for (item of basic) {
-      if (grade == item) return`${grade}º ano do ensino fundamental`
-    }
-
-    return `${grade}º ano do ensino médio`
+    if (grade <= 5)
+      return`${grade + 4}º ano do ensino fundamental`
+    
+    return `${grade - 5}º ano do ensino médio`
   },
   date(timestamp) {
     const date = new Date(timestamp);

@@ -1,11 +1,43 @@
-// const db = require("../../config/db");
-// const { date } = require("../../lib/utils");
 const Base = require('./Base');
+
+const db = require("../../config/db");
 
 Base.init({ table: 'students' });
 
 module.exports = {
   ...Base,
+
+  async paginate(params) {
+    const{ filter, limit, offset } = params;
+
+    let query = "";
+      filterQuery = "";
+      totalQuery = `(
+        SELECT COUNT(*) FROM students
+      ) AS total`;
+
+    if (filter) {
+      filterQuery = `
+      WHERE students.name ILIKE '%${filter}%'
+      OR students.email ILIKE '%${filter}%'`;
+
+      totalQuery = `(
+        SELECT COUNT(*) FROM students
+        ${filterQuery}
+      ) AS total`;
+    }
+
+    query = `SELECT * FROM students, ${totalQuery}
+      ${filterQuery}`;
+
+    query = `${query}
+    ORDER BY students.name
+    LIMIT $1 OFFSET $2`;
+
+    const results = await db.query(query, [limit, offset]);
+
+    return results.rows;
+  }
 } 
 //   all(callback) {
 //     db.query(`SELECT * FROM students`, function(err, results) {
@@ -109,36 +141,4 @@ module.exports = {
 //       callback(results.rows);
 //     })
 //   },
-//   paginate(params) {
-//     const{ filter, limit, offset, callback } = params;
-
-//     let query = "";
-//       filterQuery = "";
-//       totalQuery = `(
-//         SELECT COUNT(*) FROM students
-//       ) AS total`;
-
-//     if (filter) {
-//       filterQuery = `
-//       WHERE students.name ILIKE '%${filter}%'
-//       OR students.email ILIKE '%${filter}%'`;
-
-//       totalQuery = `(
-//         SELECT COUNT(*) FROM students
-//         ${filterQuery}
-//       ) AS total`;
-//     }
-
-//     query = `SELECT * FROM students, ${totalQuery}
-//       ${filterQuery}`;
-
-//     query = `${query}
-//     ORDER BY students.name
-//     LIMIT $1 OFFSET $2`;
-
-//     db.query(query, [limit, offset], function(err, results) {
-//       if (err) throw `Databse Error! ${err}`;
-
-//       callback(results.rows);
-//     })
-//   }
+  
