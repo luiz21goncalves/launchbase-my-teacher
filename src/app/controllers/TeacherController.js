@@ -41,21 +41,35 @@ module.exports = {
   create(req, res) {
     return res.render('teachers/create');
   },
-  post(req, res) {
-    return res.send(req.body);
-    const keys = Object.keys(req.body);
+  async post(req, res) {
+    try {
+      const {
+        avatar_url,
+        name,
+        birth_date,
+        education_level,
+        class_type,
+        subjects_taught,
+      } = req.body;
+  
+      const teacherId = await Teacher.create({
+        avatar_url,
+        name,
+        birth_date,
+        education_level,
+        class_type,
+        subjects_taught,
+      });
 
-    for (key of keys) {
-      if (req.body[key] == '')
-        return res.send('Por favor, preencha todos os campos')
-    }
-
-    Teacher.create(req.body, function(teacher) {
-      return res.redirect(`/teachers/${teacher.id}`)
-    })
+      return res.redirect(`/teachers/${teacherId}`);
+    } catch (err) {
+      console.error(err);
+    } 
   },
-  show(req, res) {
-    Teacher.find(req.params.id, function(teacher) {
+  async show(req, res) {
+    try {
+      const teacher = await Teacher.find(req.params.id);
+
       if (!teacher) res.send('Professor não encontrado!');
 
       teacher.age = age(teacher.birth_date);
@@ -63,8 +77,11 @@ module.exports = {
       teacher.subjects_taught = (teacher.subjects_taught.split(','))
       teacher.created_at = date(teacher.created_at).pt_BR;
 
-      return res.render('teachers/show', { teacher })
-    });
+      return res.render('teachers/show', { teacher });
+    } catch (err) {
+      console.error(err);
+    }
+    
   },
   edit(req, res) {
     Teacher.find(req.params.id, function(teacher) {

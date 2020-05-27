@@ -34,7 +34,7 @@ function paginate(selectedPage,totalPages) {
   }
 
   return pages
-}
+};
 
 const pagination = document.querySelector(".pagination");
 
@@ -59,8 +59,26 @@ function createPagination(pagination) {
   }
 
   pagination.innerHTML = elements;
-}
+};
 
 if (pagination) {
   createPagination(pagination);
-}
+};
+
+const Validate = {
+  allFields(event) {
+    const fields = document.querySelectorAll('.item input, .item select');
+
+    for (field of fields) {
+      if (field.value == '') {
+        const message = document.createElement('div');
+        message.classList.add('message');
+        message.classList.add('error');
+        message.innerText = 'Por favor, preencha todos os campos.'
+        document.querySelector('body').append(message);
+
+        event.preventDefault();
+      }
+    }
+  },
+};

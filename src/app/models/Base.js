@@ -32,7 +32,7 @@ const Base = {
     return results.rows[0];
   },
 
-  async findOnd(filters) {
+  async findOne(filters) {
     const results = await find(filters, this.table);
 
     return results.rows[0];
