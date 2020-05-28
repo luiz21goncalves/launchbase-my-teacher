@@ -11,8 +11,15 @@ async function post(req, res, next) {
   next();
 };
 
-async function show(req, res, next) {
+async function checkStudent(req, res, next) {
+  const student = await Student.find(req.params.id || req.body.id);
 
+  if (!student)
+    return res.redirect('/students');
+
+  req.student = student;
+
+  next();
 }
 
-module.exports = { post };
+module.exports = { post, checkStudent };

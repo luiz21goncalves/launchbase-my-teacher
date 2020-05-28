@@ -6,12 +6,17 @@ module.exports = {
   async index(req, res) {
     try {
       let { filter, page, limit } = req.query;
-
+      filter = filter || '';
       page = page || 1;
       limit = limit || 2;
       let offset = Math.ceil(limit * (page - 1));
 
-      const params = { filter, page, limit, offset };
+      const params = {
+        filters: { where: { name: filter }, or: { subjects_taught: filter} },
+        page,
+        limit,
+        offset
+      };
 
       let teachers = await Teacher.paginate(params);
 
@@ -19,8 +24,6 @@ module.exports = {
         total: Math.ceil(teachers[0].count / limit),
         page
       }
-      
-      let teachersArray = [];
 
       teachers = teachers.map(teacher => ({
         ...teacher,

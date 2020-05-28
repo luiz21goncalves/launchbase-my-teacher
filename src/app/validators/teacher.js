@@ -15,7 +15,7 @@ async function checkTeacher(req, res, next) {
   const teacher = await Teacher.find(req.params.id || req.body.id);
 
   if (!teacher)
-    return res.redirect('/students');
+    return res.redirect('/teachers');
   
   req.teacher = teacher;
 

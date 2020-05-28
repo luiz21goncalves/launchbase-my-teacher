@@ -95,6 +95,33 @@ const Base = {
       console.error(err);
     }
   },
+
+  async paginate(params) {
+    const{ filters, limit, offset } = params;
+
+    let filterQuery = "";
+
+    if (filters) {
+      Object.keys(filters).map(key => {
+        filterQuery += ` ${key}`;
+        
+        Object.keys(filters[key]).map(field => {
+          filterQuery += ` ${this.table}.${field} ILIKE '%${filters[key][field]}%'`
+        });
+      });
+    }
+
+    const query = `
+      SELECT * FROM ${this.table}, (SELECT COUNT(*) FROM ${this.table}) AS total
+      ${filterQuery}
+      ORDER BY ${this.table}.name
+      LIMIT ${limit} OFFSET ${offset}
+    `;
+
+   const results = await db.query(query);
+
+   return results.rows;
+  },
 };
 
 module.exports = Base;
