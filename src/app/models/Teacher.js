@@ -1,12 +1,43 @@
-// const db = require("../../config/db");
-// const { date } = require("../../lib/utils");
-
 const Base = require('./Base');
+
+const db = require("../../config/db");
 
 Base.init({ table: 'teachers' });
 
 module.exports = {
   ...Base,
+
+  async paginate(params) {
+    const{ filter, limit, offset } = params;
+
+    let query = "";
+      filterQuery = "";
+      totalQuery = `(
+        SELECT COUNT(*) FROM teachers
+      ) AS total`;
+
+    if (filter) {
+      filterQuery = `
+      WHERE teachers.name ILIKE '%${filter}%'
+      OR teachers.subjects_taught ILIKE '%${filter}%'`;
+
+      totalQuery = `(
+        SELECT COUNT(*) FROM teachers
+        ${filterQuery}
+      ) AS total`;
+    }
+
+    query = `SELECT * FROM teachers, ${totalQuery}
+      ${filterQuery}`;
+
+    query = `${query}
+    ORDER BY teachers.name
+    LIMIT $1 OFFSET $2`;
+
+   const results = await db.query(query, [limit, offset]);
+
+   return results.rows;
+  },
 };
 
   // all(callback) {
@@ -86,36 +117,4 @@ module.exports = {
   //     callback();
   //   });
   // },
-  // paginate(params) {
-  //   const{ filter, limit, offset, callback } = params;
-
-  //   let query = "";
-  //     filterQuery = "";
-  //     totalQuery = `(
-  //       SELECT COUNT(*) FROM teachers
-  //     ) AS total`;
-
-  //   if (filter) {
-  //     filterQuery = `
-  //     WHERE teachers.name ILIKE '%${filter}%'
-  //     OR teachers.subjects_taught ILIKE '%${filter}%'`;
-
-  //     totalQuery = `(
-  //       SELECT COUNT(*) FROM teachers
-  //       ${filterQuery}
-  //     ) AS total`;
-  //   }
-
-  //   query = `SELECT * FROM teachers, ${totalQuery}
-  //     ${filterQuery}`;
-
-  //   query = `${query}
-  //   ORDER BY teachers.name
-  //   LIMIT $1 OFFSET $2`;
-
-  //   db.query(query, [limit, offset], function(err, results) {
-  //     if (err) throw `Databse Error! ${err}`;
-
-  //     callback(results.rows);
-  //   })
-  // }
+  

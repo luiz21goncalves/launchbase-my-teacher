@@ -75,7 +75,7 @@ const Validate = {
         message.classList.add('message');
         message.classList.add('error');
         message.innerText = 'Por favor, preencha todos os campos.'
-        document.querySelector('body').append(message);
+        document.querySelector('.card').append(message);
 
         event.preventDefault();
       }

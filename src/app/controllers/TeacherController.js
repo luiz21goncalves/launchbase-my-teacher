@@ -3,40 +3,34 @@ const { date, graduation, age } = require('../../lib/utils');
 const Teacher = require('../models/Teacher');
 
 module.exports = {
-  index(req, res) {
-    return res.render('teachers/index')
-    let { filter, page, limit } = req.query;
+  async index(req, res) {
+    try {
+      let { filter, page, limit } = req.query;
 
-    page = page || 1;
-    limit = limit || 2;
-    let offset = Math.ceil(limit * (page - 1));
+      page = page || 1;
+      limit = limit || 2;
+      let offset = Math.ceil(limit * (page - 1));
 
-    const params = {
-      filter,
-      page,
-      limit,
-      offset,
-      callback(teachers) {
-        const pagination = {
-          total: Math.ceil(teachers[0].count / limit),
-          page
-        }
-        
-        let teachersArray = [];
+      const params = { filter, page, limit, offset };
 
-        teachers = teachers.forEach (function (teacher) {
-          teacher = {
-            ...teacher,
-            subjects_taught: (teacher.subjects_taught.split(','))
-          }
-          return teachersArray.push(teacher)
-        });
-              
-        return res.render('teachers/index', { teachers: teachersArray, pagination, filter });
+      let teachers = await Teacher.paginate(params);
+
+      const pagination = {
+        total: Math.ceil(teachers[0].count / limit),
+        page
       }
-    }
+      
+      let teachersArray = [];
 
-    Teacher.paginate(params);
+      teachers = teachers.map(teacher => ({
+        ...teacher,
+        subjects_taught: (teacher.subjects_taught.split(',')),
+      }));
+            
+      return res.render('teachers/index', { teachers, pagination, filter });
+    } catch (err) {
+      console.error(err)
+    }
   },
   create(req, res) {
     return res.render('teachers/create');
