@@ -131,10 +131,16 @@ module.exports = {
       console.error(err);
     }
   },
-  delete(req, res) {
-    Student.delete(req.body.id, function () {
-      return res.redirect(`/students`);
-    });
+  async delete(req, res) {
+    try {
+      const student = req.student;
+
+      await Student.delete(student.id);
+
+      return res.render('alert/delete', { student });
+    } catch (err) {
+      console.error(err);
+    }
   },
 }
   

@@ -39,17 +39,17 @@ module.exports = {
     return res.render('teachers/create');
   },
   async post(req, res) {
+    const {
+      avatar_url,
+      name,
+      birth_date,
+      education_level,
+      class_type,
+      subjects_taught,
+    } = req.body;
+
     try {
-      const {
-        avatar_url,
-        name,
-        birth_date,
-        education_level,
-        class_type,
-        subjects_taught,
-      } = req.body;
-  
-      const teacherId = await Teacher.create({
+      const id = await Teacher.create({
         avatar_url,
         name,
         birth_date,
@@ -58,16 +58,14 @@ module.exports = {
         subjects_taught,
       });
 
-      return res.redirect(`/teachers/${teacherId}`);
+      return res.render('alert/created', { teacher: { id, name } });
     } catch (err) {
       console.error(err);
     } 
   },
   async show(req, res) {
     try {
-      const teacher = await Teacher.find(req.params.id);
-
-      if (!teacher) res.send('Professor não encontrado!');
+      const teacher = req.teacher;
 
       teacher.age = age(teacher.birth_date);
       teacher.education_level = graduation(teacher.education_level);
@@ -81,29 +79,51 @@ module.exports = {
     
   },
   edit(req, res) {
-    Teacher.find(req.params.id, function(teacher) {
-      if (!teacher) return res.send('Professor não encontrado!');
-      
+    try {
+      const teacher = req.teacher;
+
       teacher.birth_date = date(teacher.birth_date).iso;
 
       return res.render('teachers/edit', {teacher});
-    });
-  },
-  put(req, res) {
-    const keys = Object.keys(req.body);
-
-    for (key of keys) {
-      if (req.body[key] == '')
-        return res.send('Por favor, preencha todos os campos')
+    } catch (err) {
+      console.error(err);
     }
-
-    Teacher.update(req.body, function() {
-      return res.redirect(`/teachers/${req.body.id}`)
-    });
   },
-  delete(req, res) {
-    Teacher.delete(req.body.id, function () {
-      return res.redirect(`/teachers`);
-    });
+  async put(req, res) {
+    const {
+      avatar_url,
+      name,
+      birth_date,
+      education_level,
+      class_type,
+      subjects_taught,
+      id,
+    } = req.body;
+
+    try {
+      await Teacher.update(id, {
+        avatar_url,
+        name,
+        birth_date,
+        education_level,
+        class_type,
+        subjects_taught,
+      });
+
+      return res.render('alert/edited', { teacher: { id, name } });
+    } catch (err) {
+      console.error(err);
+    }
+  },
+  async delete(req, res) {
+    try {
+      const teacher = req.teacher;
+
+      await Teacher.delete(teacher.id);
+
+      return res.render('alert/delete', { teacher });
+    } catch (err) {
+      console.error(err);
+    }
   },
 }
