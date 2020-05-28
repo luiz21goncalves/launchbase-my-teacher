@@ -1,21 +1,20 @@
 {% extends "layout.njk" %}
+{% import "parts/card.njk" as card %}
 
 {% block content %}
-    <div class="card">
 
-      <div class="image" style="background: url({{ student.avatar_url }}) no-repeat center center / cover">
-        <img >
-      </div>
-
-      <form method="POST" action="/students">
-        
-        <div class="details">
-          <h3>Detalhes</h3>
-
-          {% include "students/filds.njk" %}
-        </div>
-
-      </form>
+  {% call card.render() %}
+    <div class="image" style="background: url({{ student.avatar_url }}) no-repeat center center / cover">
+      <img >
     </div>
 
+    <form method="POST" action="/students">
+      <div class="details">
+        <h3>Detalhes</h3>
+
+        {% include "students/filds.njk" %}
+      </div>
+    </form>
+  {% endcall %}
+ 
 {% endblock content %}

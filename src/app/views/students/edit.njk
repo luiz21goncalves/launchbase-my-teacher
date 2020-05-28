@@ -1,8 +1,9 @@
 {% extends "layout.njk" %}
+{% import "parts/card.njk" as card %}
 
 {% block content %}
-  <div class="card">
 
+  {% call card.render() %}
     <div class="image"style="background: url({{ student.avatar_url }}) no-repeat center center / cover">
       <img >
     </div>
@@ -30,8 +31,8 @@
       <button type="submit">Deletar</button>
       </form>
     </div>
-  </div>
+  {% endcall %}
   
-{% include "confirm.njk" %}
+  {% include "confirm.njk" %}
 
 {% endblock content %}

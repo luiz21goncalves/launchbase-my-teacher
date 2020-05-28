@@ -1,9 +1,12 @@
 {% extends "layout.njk" %}
+{% import "parts/card.njk" as card %}
 
 {% block content %}
-  <div class="card table-container">
+  {% call card.render("table-container") %}
+
     <div class="header">
       <a class="button" href="/students/create">Novo</a>
+
       <form action="/students" method="GET">
         <input 
           type="text" 
@@ -14,35 +17,39 @@
         <button type="submit">Filtrar</button>
       </form>
     </div>
-  <table>
-    <thead>
-      <tr>
-        <th>Nome Completo</th>
-        <th>Email</th>
-        <th>Ano escolar</th>
-        <th>Ação</th>
-      </tr>
-    </thead>
 
-    <tbody>
-      {% for student in students %}
+    <table>
+      <thead>
         <tr>
-          <td>
-            <span style="background-image: url({{ student.avatar_url }})"></span>
-            {{ student.name }}
-          </td>
-          <td>{{ student.email }}</td>
-          <td>{{ student.grade }}</td>
-          <td><a href="/students/{{ student.id }}">ver</a></td>
+          <th>Nome Completo</th>
+          <th>Email</th>
+          <th>Ano escolar</th>
+          <th>Ação</th>
         </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-   <div class="pagination"
-    data-page="{{pagination.page}}"
-    data-total="{{pagination.total}}"
-    data-filter="{{ filter }}"  
-  >
-  </div>
-  </div>
+      </thead>
+
+      <tbody>
+        {% for student in students %}
+          <tr>
+            <td>
+              <span style="background-image: url({{ student.avatar_url }})"></span>
+              {{ student.name }}
+            </td>
+            <td>{{ student.email }}</td>
+            <td>{{ student.grade }}</td>
+            <td><a href="/students/{{ student.id }}">ver</a></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="pagination"
+      data-page="{{pagination.page}}"
+      data-total="{{pagination.total}}"
+      data-filter="{{ filter }}"  
+    >
+    </div>
+
+  {% endcall %}
+
 {% endblock content %}

@@ -38,20 +38,42 @@ module.exports = {
       console.error(err);
     }
   },
-  create(req, res) {
-    return res.render('students/create');
-  },
-  post(req, res) {
-    const keys = Object.keys(req.body);
+  async create(req, res) {
+    try {
+      const teachers = await Teacher.findAll();
 
-    for (key of keys) {
-      if (req.body[key] == '')
-        return res.send('Por favor, preencha todos os campos')
+      return res.render('students/create', { teachers });
+    } catch (err) {
+      console.error(err);
     }
+  },
+  async post(req, res) {
+    const {
+      avatar_url,
+      name,
+      email,
+      birth_date,
+      grade,
+      workload,
+      teacher_id,
+    } = req.body;
 
-    Student.create(req.body, function(student) {
-      return res.redirect(`/students/${student.id}`)
-    })
+    try {
+      const id = await Student.create({
+        avatar_url,
+        name,
+        email,
+        birth_date,
+        grade,
+        workload,
+        teacher_id,
+      });
+
+      console.log({ student: { id, name } });
+      return res.render('alert/created', { student: { id, name } });
+    } catch (err) {
+      console.error(err);
+    }
   },
   async show(req, res) {
     try {
@@ -69,28 +91,45 @@ module.exports = {
     }
 
   },
-  edit(req, res) {
-    Student.find(req.params.id, function(student) {
-      if (!student) return res.send('Aluno não encontrado!');
-      
+  async edit(req, res) {
+    try {
+      const student = req.student;
+      const teachers = await Teacher.findAll();
+
       student.birth_date = date(student.birth_date).iso;
 
-      Student.studentFind(function(students) {
-        return res.render('students/edit', { student ,students });
-      });
-    });
-  },
-  put(req, res) {
-    const keys = Object.keys(req.body);
-
-    for (key of keys) {
-      if (req.body[key] == '')
-        return res.send('Por favor, preencha todos os campos')
+      return res.render('students/edit', { student, teachers });
+    } catch (err) {
+      console.error(err);
     }
+  },
+  async put(req, res) {
+    const {
+      avatar_url,
+      name,
+      email,
+      birth_date,
+      grade,
+      workload,
+      teacher_id,
+      id,
+    } = req.body;
 
-    Student.update(req.body, function() {
-      return res.redirect(`/students/${req.body.id}`)
-    });
+    try {
+      await Student.update(id, {
+        avatar_url,
+        name,
+        email,
+        birth_date,
+        grade,
+        workload,
+        teacher_id,
+      });
+
+      return res.render('alert/edited', { student: { id, name } });
+    } catch (err) {
+      console.error(err);
+    }
   },
   delete(req, res) {
     Student.delete(req.body.id, function () {

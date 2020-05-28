@@ -7,10 +7,10 @@ const StudentValidator = require('../app/validators/student');
 routes.get('/', StudentController.index);
 routes.get('/create', StudentController.create);
 routes.get('/:id', StudentValidator.checkStudent, StudentController.show);
-routes.get('/:id/edit', StudentController.edit);
+routes.get('/:id/edit', StudentValidator.checkStudent, StudentController.edit);
 
-routes.post('/', StudentValidator.post, StudentController.post);
-routes.put('/', StudentController.put);
-routes.delete('/', StudentController.delete);
+routes.post('/', StudentValidator.checkFields, StudentController.post);
+routes.put('/', StudentValidator.checkFields, StudentController.put);
+routes.delete('/', StudentValidator.checkStudent, StudentController.delete);
 
 module.exports = routes;

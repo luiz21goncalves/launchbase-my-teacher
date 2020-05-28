@@ -1,6 +1,6 @@
 const Teacher = require('../models/Teacher');
 
-function post(req, res, next) {
+function checkFields(req, res, next) {
   const keys = Object.keys(req.body);
 
   for (key of keys) {
@@ -22,4 +22,4 @@ async function checkTeacher(req, res, next) {
   next();
 }
 
-module.exports = { post, checkTeacher };
+module.exports = { checkFields, checkTeacher };

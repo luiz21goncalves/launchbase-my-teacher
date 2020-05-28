@@ -1,14 +1,14 @@
 {% extends "layout.njk" %}
+{% import "parts/card.njk" as card %}
 
 {% block content %}
-  <div class="card">
 
+  {% call card.render() %}
     <div class="image" style="background: url({{ student.avatar_url }}) no-repeat center center / cover">
       <img >
     </div>
 
     <div class="details">
-
       <h3>Detalhes</h3>
 
       <div class="item">
@@ -43,6 +43,6 @@
 
       <a href="/students/{{ student.id }}/edit" class="button" >Editar</a>
     </div>
-
-  </div>
+  {% endcall %}
+  
 {% endblock content %}

@@ -1,0 +1,55 @@
+{% extends "layout.njk" %}
+{% import "parts/card.njk" as card %}
+
+{% block content %}
+
+  {% if student %}
+
+    {% call card.render("alert") %}
+
+      <div class="success-lottie"></div>
+
+      <div class="content">
+        <h3>{{ student.name }}</h3>
+
+        <P>Perfil atualizado com sucesso</P>
+
+        <a href="/students/{{ student.id }}">Ver perfil</a>
+      </div>
+
+    {% endcall %}
+
+  {% endif %}
+
+  {% if teacher %}
+
+    {% call card.render("alert") %}
+
+      <div class="success-lottie"></div>
+
+      <div class="content">
+        <h3>{{ teacher.name }}</h3>
+
+        <P>Perfil atualizado com sucesso</P>
+
+        <a href="/teachers/{{ teacher.id }}">Ver perfil</a>
+      </div>
+
+    {% endcall %}
+
+  {% endif %}
+
+  <script src="/lottie.min.js"></script>
+
+  <script>
+    const element = document.querySelector('.success-lottie');
+    lottie.loadAnimation({
+      container: element,
+      renderer: 'svg',
+      loop: false,
+      autoplay: true,
+      path: '/9917-success.json'
+    });
+  </script>
+
+{% endblock content %}
