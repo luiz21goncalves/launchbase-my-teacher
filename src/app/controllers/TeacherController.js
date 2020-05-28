@@ -20,8 +20,10 @@ module.exports = {
 
       let teachers = await Teacher.paginate(params);
 
+      const count = await Teacher.count();
+
       const pagination = {
-        total: Math.ceil(teachers[0].count / limit),
+        total: Math.ceil(count / limit),
         page
       }
 

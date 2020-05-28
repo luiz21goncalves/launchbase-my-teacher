@@ -112,7 +112,7 @@ const Base = {
     }
 
     const query = `
-      SELECT * FROM ${this.table}, (SELECT COUNT(*) FROM ${this.table}) AS total
+      SELECT * FROM ${this.table}
       ${filterQuery}
       ORDER BY ${this.table}.name
       LIMIT ${limit} OFFSET ${offset}
@@ -121,6 +121,12 @@ const Base = {
    const results = await db.query(query);
 
    return results.rows;
+  },
+
+  async count() {
+    const results = await db.query(`SELECT COUNT(*) FROM ${this.table}`);
+    
+    return results.rows[0].count;
   },
 };
 
